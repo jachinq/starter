@@ -1,0 +1,36 @@
+/* 定义常量-主题颜色 */
+:root {
+    --theme-text: #abb2bf;
+    --theme-text-hover: #cad3e2;
+    --theme-background-app: rgba(16, 0, 8, 0.21);
+    --theme-background-app-hover: #323232;
+    --theme-background: #282c34;
+    --theme-background-hover: #323232;
+    --theme-shodow: rgba(123, 123, 123, 0.8);
+}
+
+/* 定义常量-自定义表单组件颜色 */
+:root {
+    --cus-border-height: 1px;
+    /* --cus-border-before-color: var(--theme-text, #909399); */
+    --cus-border-before-color: #585858;
+    --cus-border-after-color: #5891ff;
+    /*--cus-border-after-color: #18ff61;*/
+    --cus-active-color: #5891ff;
+    --cus-input-hovered-color: #4985e01f;
+
+    --cus-disabled-background-color: #696c70;
+    --cus-disabled-text-color: #dfe7ee;
+    /*color: #7f5b9c;*/
+
+
+    --cus-gap-width: 20px;
+    --cus-width: 40px;
+    --cus-height: 40px;
+    --cus-background-color: var(--theme-background, #fff);
+    --cus-background-color-hover: var(--theme-background-hover, #fff);
+
+    --cus-text-color: var(--theme-text, #909399);
+    --cus-text-color-hover: #5891ff;
+}
+

@@ -1,0 +1,34 @@
+{
+  "name": "Starter",
+  "version": "0.0.0.1",
+  "manifest_version": 3,
+  "description": "一款轻量化的浏览器启动页、新标签页",
+  "icons": {
+    "16": "favicon.ico",
+    "32": "favicon.ico",
+    "48": "favicon.ico",
+    "128": "favicon.ico"
+  },
+//  "browser_action": {
+//    "default_icon": "favicon.ico",
+//    "default_title": "浏览器启动页、新标签页"
+//  },
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "js/background.js",
+    "type": "module"
+  },
+//  "action": {
+//    "default_popup": "popup/popup.html"
+//  },
+  "permissions": [
+    "tabs",
+    "background"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "index.html",
+    "homepage": "index.html"
+  }
+}

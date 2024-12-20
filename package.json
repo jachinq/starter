@@ -1,0 +1,24 @@
+{
+  "name": "starter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "build": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build"
+  },
+  "dependencies": {
+    "element-ui": "latest",
+    "vue": "^2.6.11",
+    "vue-resource": "^1.5.3",
+    "webdav": "^5.5.0"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "~4.3.1",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

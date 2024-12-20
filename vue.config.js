@@ -1,6 +1,26 @@
 //vue.config.js
 module.exports = {
 
+    pages: {
+        index: {
+            entry: 'src/main.js',
+            template: 'public/index.html',
+            filename: 'index.html'
+        },
+        popup: {
+            entry: 'src/popup.js',
+            template: 'public/popup.html',
+            filename: 'popup.html'
+        }
+    },
+    configureWebpack: {
+        output: {
+            filename: (chunkData) => {
+                return chunkData.chunk.name === 'popup' ? 'js/popup.js' : 'js/[name].js';
+            }
+        }
+    },
+
     devServer: {
         // port: 8080,
 
@@ -51,25 +71,25 @@ module.exports = {
                 target: "https://www.dmoe.cc/random.php",
                 changeOrigin: true,
                 ws: true,
-                pathRewrite: {"^/yhApi":""},
+                pathRewrite: { "^/yhApi": "" },
             },
             '/myApi': { // 魅影
                 target: "https://tuapi.eees.cc/api.php",
                 changeOrigin: true,
                 ws: true,
-                pathRewrite: {"^/myApi":""},
+                pathRewrite: { "^/myApi": "" },
             },
             '/ydApi': { // 如诗
                 target: encodeURI('https://api.r10086.com/樱道随机图片api接口.php?图片系列=动漫综合1&参数=json'),
                 changeOrigin: true,
                 ws: true,
-                pathRewrite: {"^/ydApi":""},
+                pathRewrite: { "^/ydApi": "" },
             },
             '/rsApi': { // 如诗
                 target: 'https://api.likepoems.com/img/pc/',
                 changeOrigin: true,
                 ws: true,
-                pathRewrite: {"^/rsApi":""},
+                pathRewrite: { "^/rsApi": "" },
             }
         }
     }

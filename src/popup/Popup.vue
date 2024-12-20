@@ -21,14 +21,14 @@
     </div>
   </div>
   <div class="container" v-else>
-    <div class="brand-title">Server Config</div>
+    <div class="brand-title">Webdav Config</div>
     <div class="inputs">
       <label>服务器地址</label>
       <input type="text" v-model="serverConfig.serverUrl" />
-      <label>api接口</label>
-      <input type="text" v-model="serverConfig.apiUrl"/>
+      <label>文件</label>
+      <input type="text" placeholder="留空则使用默认文件名 collect_v2.json" v-model="serverConfig.filePath"/>
       <label>鉴权</label>
-      <textarea v-model="serverConfig.params" rows="4"></textarea>
+      <textarea v-model="serverConfig.params" rows="4" placeholder="填写鉴权信息，格式：username=xxxx&password=xxx"></textarea>
       <button type="submit" @click="saveConfig">保存</button>
       <button type="submit" @click="showConfig = false">返回</button>
     </div>
@@ -37,6 +37,7 @@
 
 <script>
 import helper from './help';
+import webdavUtil from './webdavutil';
 
 export default {
   name: 'Popup',
@@ -47,15 +48,15 @@ export default {
         url: '',
         description: '',
         tags: '',
-        icon: '',
       },
       serverConfig: {
         serverUrl: '',
-        apiUrl: '',
+        filePath: '',
         params: '',
       },
       hasConfig: false,
       showConfig: false,
+      webdavClient: null,
     }
   },
   async created() {
@@ -63,8 +64,21 @@ export default {
     if (Object.keys(config).length === 0) {
       console.log('No server config found');
     } else {
-      this.hasConfig = true;
-      this.serverConfig = {...config};
+      this.serverConfig = {
+        serverUrl: config.serverUrl || '',
+        filePath: config.filePath || 'collect_v2.json',
+        params: config.params || 'username=xxx&password=xxx',
+      };
+      const webdavClient = await webdavUtil.buildClient();
+      const result = await webdavUtil.testConnection(webdavClient)
+      if (result) {
+        console.log('Connection success');
+        this.hasConfig = true;
+        this.showConfig = false;
+        this.webdavClient = webdavClient;
+      } else {
+        console.log('Connection failed');
+      }
     }
     
     const pageInfo = await helper.getPageInfo();
@@ -86,17 +100,66 @@ export default {
   },
   methods: {
     async saveCollect() {
-      const saveCollect = { ...this.collect, tags: this.collect.tags.split('\n') }
-      console.log('Save clicked', saveCollect);
+      if (!this.webdavClient) {
+        this.showConfig = true;
+        return;
+      }
+      const serverData = await webdavUtil.readData(this.webdavClient) || {};
+      const collectList = serverData.collectList || [];
+      // find max id
+      let maxId = 0;
+      for (let i = 0; i < collectList.length; i++) {
+        const { id } = collectList[i];
+        if (id > maxId) {
+          maxId = id;
+        }
+      }
+      if (maxId == 0 || collectList.length == 0) {
+        // 保险起见，如果没有数据，就停止操作
+        alert('请先添加至少一条数据');
+        return;
+      }
+      maxId++;
+      console.log(collectList);
+
+      const saveCollect = { id: maxId, ...this.collect }
+      if (this.collect.tags && this.collect.tags.length > 0) {
+        saveCollect.tags = this.collect.tags.split('\n').map(tag => tag.trim()).filter(tag => tag.length > 0);
+      } else {
+        saveCollect.tags = [];
+      }
+      console.log('Save collect', saveCollect);
+      collectList.unshift(saveCollect);
+      console.log('serverData', serverData);
+      const result = webdavUtil.syncData(this.webdavClient, serverData);
+      if (result) {
+        alert('收藏成功');
+      } else {
+        alert('保存失败');
+      }
     },
-    saveConfig() {
+    async saveConfig() {
       const config = { ...this.serverConfig }
       console.log('Save Config', config);
       helper.saveServerConfig(config);
-      this.hasConfig = true;
+
+      const webdavClient = await webdavUtil.buildClient();
+      const result = await webdavUtil.testConnection(webdavClient)
+      if (result) {
+        console.log('Connection success');
+        alert('连接成功');
+        this.hasConfig = true;
+        this.showConfig = false;
+        this.webdavClient = webdavClient;
+      } else {
+        console.log('Connection failed');
+        alert('连接失败');
+      }
+
     }
   }
 }
+
 </script>
 
 <style scoped>

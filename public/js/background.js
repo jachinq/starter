@@ -3,6 +3,16 @@ if (chrome.runtime) {
 
     // 监听消息
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        console.log('chromeListener', request);
+        if (request.action === 'openPopup') {
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                if (tabs.length > 0) {
+                    chrome.action.openPopup();
+                }
+            });
+            return;
+        }
+
         new Promise((resolve, reject) => {
             if (typeof request !== 'object' || !request.type) {
                 console.error('参数异常');
@@ -28,12 +38,12 @@ if (chrome.runtime) {
                         resolve(res.json());
                     }).catch(event => {
                         console.log(event);
-                        resolve({success: false, ok: false, msg: "请求错误url=" + request.url, data: event});
+                        resolve({ success: false, ok: false, msg: "请求错误url=" + request.url, data: event });
                     });
                     break;
                 case 'test':
                     console.log('test request', request);
-                    resolve({msg: '测试', data: request});
+                    resolve({ msg: '测试', data: request });
                     break;
             }
         }).then((res) => {

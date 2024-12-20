@@ -26,7 +26,15 @@
   },
   "permissions": [
     "tabs",
-    "background"
+    "background",
+    "activeTab", 
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"]
+    }
   ],
   "chrome_url_overrides": {
     "newtab": "index.html",

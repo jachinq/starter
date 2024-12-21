@@ -4,11 +4,11 @@
     <div class="collect-header">
       <div class="btn-group">
         <el-button type="text" @click="showCollect = false" style="padding: 0;">关闭</el-button>
-        <div v-if="webdavClient" class="collect-sync" title="从云端拉取收藏夹" @click="syncData">
+        <div class="collect-sync" title="从云端拉取收藏夹" @click="syncData">
           <i class="el-icon-cloudy"></i>
         </div>
       </div>
-      <template v-if="webdavClient && serverData.collectList.length > 0">
+      <template v-if="serverData.collectList.length > 0">
         <cus-input style="width: 100%;" placeholder="搜索" v-model="filterText" @input="filterColletList"></cus-input>
         <el-pagination background :current-page.sync="pageInfo.currentPage" :page-size="pageInfo.pageSize"
           :total="pageInfo.total" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[8, 16, 24, 48]"
@@ -17,16 +17,18 @@
       </template>
     </div>
     <div class="collect-container">
-      <div v-if="webdavClient" class="collect-list">
+      <div v-if="webdavClient || collectList.length > 0" class="collect-list">
         <template v-if="loading">
           <i class="el-icon-loading"></i>
         </template>
-        <template v-else v-for="(item, index) in collectList">
-          <div class="box-card">
+        <template v-else v-for="(item, _index) in collectList">
+          <div class="box-card" >
             <div class="card-header" :title="item.name">
-              <el-avatar :size="24" :src="getFavicon(item.url)" class="favicon">
-                {{ item.name && item.name.slice(0, 1) }}
-              </el-avatar>
+              <div @click="openUrl(item)">
+                <el-avatar :size="24" :src="getFavicon(item.url)" class="favicon">
+                  {{ item.name && item.name.slice(0, 1) }}
+                </el-avatar>
+              </div>
               <span class="card-title">{{ item.name }}</span>
             </div>
             <div class="card-content">
@@ -98,7 +100,6 @@ export default {
     });
 
     setTimeout(() => {
-      that.webdavClient = webdavutil.buildClient();
       const collectData = localStorage.getItem('collectData');
       if (collectData) {
         that.serverData = JSON.parse(collectData);
@@ -106,6 +107,7 @@ export default {
         that.pageInfo.total = that.collectList.length;
         that.pageInfo.currentPage = 1;
       } else {
+        that.webdavClient = webdavutil.buildClient();
         that.syncData();
       }
 
@@ -117,7 +119,7 @@ export default {
     },
     syncData() {
       if (!this.webdavClient) {
-        return;
+        this.webdavClient = webdavutil.buildClient();
       }
       const that = this;
       that.loading = true;
@@ -139,6 +141,11 @@ export default {
         return faviconUrl + '/favicon.ico';
       }
       return 'https://www.google.com/s2/favicons?domain=' + url;
+    },
+    openUrl(item) {
+      if (item && item.url) {
+        window.open(item.url, '_blank');
+      }
     },
     getTagColor(tag) {
       if (this.tagColorMap[tag]) {

@@ -20,6 +20,7 @@ export default {
     OpenDrawIcon: "eventOpenDrawIcon", // 打开 Icon 编辑
     OpenDrawCard: "eventOpenDrawCard", // 打开 Card 编辑
     OpenDrawCategory: "eventOpenDrawCategory", // 打开 Category 编辑
+    OpenDrawCollect: "eventOpenDrawCollect", // 打开设置
     OpenDrawSetting: "eventOpenDrawSetting", // 打开设置
     OpenBackground: "eventOpenBackground", // 打开壁纸
 

@@ -66,8 +66,8 @@ export default {
     } else {
       this.serverConfig = {
         serverUrl: config.serverUrl || '',
-        filePath: config.filePath || 'collect_v2.json',
-        params: config.params || 'username=xxx&password=xxx',
+        filePath: config.filePath || '',
+        params: config.params || '',
       };
       const webdavClient = await webdavUtil.buildClient();
       const result = await webdavUtil.testConnection(webdavClient)

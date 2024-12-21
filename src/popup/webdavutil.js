@@ -1,6 +1,6 @@
 import { createClient } from "webdav/dist/web/index";
 
-let file_path = "collect_vtest.json";
+let file_path = "collect_v2.json";
 const default_data = {};
 
 const parseConfig = () => {

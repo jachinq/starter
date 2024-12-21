@@ -66,6 +66,9 @@
                 <div class="menu-item" v-if="activeCategory.type==='card'" @click="clickMenuItem('eventOpenDrawCard', {cardOptType: 'add'})">
                     <i class="el-icon-circle-plus-outline"></i> 新增卡片
                 </div>
+                <div class="menu-item" @click="clickMenuItem('eventOpenDrawCollect', {})">
+                   <i class="el-icon-star-off"></i> 收藏
+                </div>
                 <div class="menu-item" @click="clickMenuItem('eventOpenDrawSetting', {})">
                    <i class="el-icon-setting"></i> 设置
                 </div>

@@ -18,7 +18,7 @@
         </div>
 
         <!-- 右键菜单 -->
-        <Menu/>
+        <Menu></Menu>
 
         <!-- 壁纸 -->
         <Background/>

@@ -2,32 +2,36 @@
     <div id="app">
         <BackgroundImg/>
         <Page/>
+        <Collect/>
     </div>
 </template>
 
 <script>
-    import Page from './components/Page'
-    import BackgroundImg from './components/layout/BackgroundImg'
 
-    export default {
-        name: 'App',
-        components: {
-            BackgroundImg,
-            Page
-        },
-        data() {
-            return {
-            }
-        },
-        created() {
-            // console.log(this.$bus);
-        },
-        mounted() {
-        },
-        methods: {
+import Page from './components/Page'
+import BackgroundImg from './components/layout/BackgroundImg'
+import Collect from './popup/Collect';
 
+export default {
+    name: 'App',
+    components: {
+        BackgroundImg,
+        Page,
+        Collect
+    },
+    data() {
+        return {
         }
+    },
+    created() {
+        // console.log(this.$bus);
+    },
+    mounted() {
+    },
+    methods: {
+
     }
+}
 </script>
 
 
@@ -99,17 +103,6 @@
         height: 100%;
         padding: 0;
         margin: 0;
-    }
-
-    html {
-        /*background-image: var(--bg-url);*/
-        /*background-size: cover; !*覆盖填充*!*/
-        /*background-position:center; !*居中*!*/
-        /*background:  linear-gradient(to bottom, var(--beg-bg-color) 0%, var(--end-bg-color) 100%);*/
-    }
-
-    body {
-        /*backdrop-filter: blur(var(--bg-blur));*/
     }
 
     * {

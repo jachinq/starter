@@ -3,9 +3,10 @@ if (chrome.runtime) {
 
     // 监听消息
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        console.log('chromeListener', request);
+        // console.log('chromeListener', request);
         if (request.action === 'openPopup') {
             chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                // console.log('tabs', tabs);
                 if (tabs.length > 0) {
                     chrome.action.openPopup();
                 }

@@ -61,8 +61,8 @@ const sortDesc = function (a, b) {
  * @param b
  * @returns {number}
  */
-const randomSort = function(a, b) {
-    return Math.random()>.5 ? -1 : 1;
+const randomSort = function (a, b) {
+    return Math.random() > .5 ? -1 : 1;
     //用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1，使用例子如下
     // var arr = [1, 2, 3, 4, 5];
     // arr.sort(randomSort);
@@ -95,7 +95,7 @@ const getRootCssValue = function (key) {
  * @param imgSrc
  * @param name
  */
-const downloadPicture = function(imgSrc, name) {
+const downloadPicture = function (imgSrc, name) {
 
     const image = new Image();
     // 解决跨域Canvas 污染问题
@@ -119,7 +119,7 @@ const downloadPicture = function(imgSrc, name) {
             URL.revokeObjectURL(url);
         })
     };
-    image.onerror = ()=> downloadPictureByLink(imgSrc);
+    image.onerror = () => downloadPictureByLink(imgSrc);
 };
 
 /**
@@ -138,7 +138,7 @@ const downloadPictureByLink = function (url) {
     a.click();
     a.remove();
 
-// <a href="/getAttachmentFileStream?name=test.jpg" download target="_blank">附件jpg流</a>
+    // <a href="/getAttachmentFileStream?name=test.jpg" download target="_blank">附件jpg流</a>
 };
 
 const downloadText = function (fileName, text) {
@@ -147,12 +147,12 @@ const downloadText = function (fileName, text) {
     console.log('downloadText', fileName);
 
     // type 的格式可以可以设置，可以把 appcation/json 设置进去，然后设置导出的类型
-    const blob = new Blob([text],{ type:'charset=utf-8' });
+    const blob = new Blob([text], { type: 'charset=utf-8' });
     // 兼容ie和360浏览器
-    if(window.navigator && window.navigator.msSaveOrOpenBlob){
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
         //  fileName需要指定后缀类型例：.starter
         window.navigator.msSaveOrOpenBlob(blob, fileName);
-    }else {
+    } else {
         let url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.style.display = 'none';
@@ -217,7 +217,7 @@ const checkEventSourceClassOnce = function (e, key) {
  * @param key
  * @returns {boolean}
  */
-const checkEventSourceClass = function(e, key) {
+const checkEventSourceClass = function (e, key) {
     // let path = e.path;
     // let target = e.target;
     let check = false;
@@ -230,7 +230,7 @@ const checkEventSourceClass = function(e, key) {
             return false;
         }
 
-        for(let element of path) {
+        for (let element of path) {
             if (element === undefined || element === null) {
                 continue;
             }
@@ -287,7 +287,7 @@ const checkEventSourceClass = function(e, key) {
  * @param e
  * @returns {SVGPathElement}
  */
-const getPath = function(e) {
+const getPath = function (e) {
     let path = e.path;
     if (path !== undefined && path !== null && path.length !== 0) {
         return path;
@@ -308,7 +308,7 @@ const getPath = function(e) {
  * @param node
  * @param path
  */
-const recursionGetPath = function(node, path) {
+const recursionGetPath = function (node, path) {
     let parentNode = node.parentNode;
     if (parentNode === undefined || parentNode === null) {
         return;
@@ -348,7 +348,7 @@ const copyText = function (text) {
  */
 const pasteText = async function () {
     try {
-        return await navigator.clipboard.readText().catch((e) => {console.log(e);});
+        return await navigator.clipboard.readText().catch((e) => { console.log(e); });
     } catch (err) {
         console.log('读取剪贴板失败', err);
         return "";
@@ -360,11 +360,11 @@ const pasteText = async function () {
  * @param s
  * @returns {null}
  */
-const getStrUrl = function(s) {
+const getStrUrl = function (s) {
     // var reg= /(https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/g;
-    let reg= /(https?|http|ftp|file)?:?\/\/?([^\/\n]+)?/gi;
+    let reg = /(https?|http|ftp|file)?:?\/\/?([^\/\n]+)?/gi;
     s = s.match(reg);
-    return(s&&s.length?s[0]:null);
+    return (s && s.length ? s[0] : null);
 };
 
 /**
@@ -407,7 +407,7 @@ const toDark = function (dark) {
  * @param node
  * @returns {{left: number, top: number}}
  */
-const getPosition = function(node) {
+const getPosition = function (node) {
     //获取元素相对于其父元素的left值var left
     let left = node.offsetLeft;
     let top = node.offsetTop;
@@ -415,7 +415,7 @@ const getPosition = function(node) {
     let current = node.offsetParent;
 
     // 一直循环直到根元素
-    while(current != null) {
+    while (current != null) {
         left += current.offsetLeft;
         top += current.offsetTop;
         current = current.offsetParent;
@@ -425,6 +425,60 @@ const getPosition = function(node) {
         "top": top
     }
 };
+
+/**
+ * 防抖函数
+ * @param {*} func 要执行的函数
+ * @param {*} wait debounce 时间
+ * @returns 
+ */
+const debounce = function (func, wait) {
+    let timeout;
+    return function () {
+        let context = this;
+        let args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+            func.apply(context, args);
+        }, wait);
+    }
+};
+
+/**
+ * 节流函数
+ * @param {*} func 要执行的函数
+ * @param {*} delay 节流时间
+ * @returns 
+ */
+function throttle(func, delay) {
+    let timeout;//定义一个定时器标记
+    return function () {
+        let context = this;
+        let args = arguments;
+        // 判断是否存在定时器
+        if (!timeout) {
+            // 创建一个定时器
+            timeout = setTimeout(() => {
+                // delay时间间隔清空定时器
+                clearTimeout(timeout);
+                func.call(context, args);
+            }, delay)
+        }
+    }
+}
+// 节流--时间戳版本
+function _throttle(func, delay) {
+    let prev = 0;//上一次记录时间
+    return function () {
+        let now = Date.now();//当前时间戳
+        if (now - prev > delay) {//当前时间 - 上次时间 > 延时时间
+            console.log(now - prev, delay);
+            func.call(this, arguments);//执行函数 发送请求
+            prev = now;//重置记录时间
+        }
+    }
+}
+
 
 export default {
     getPath,
@@ -443,4 +497,6 @@ export default {
     pasteText,
     getStrUrl,
     getPosition,
+    debounce,
+    throttle
 };

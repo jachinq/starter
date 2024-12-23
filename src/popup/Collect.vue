@@ -24,7 +24,7 @@
         <template v-else v-for="(item, _index) in collectList">
           <div class="box-card" >
             <div class="card-header" :title="item.name">
-              <div @click="openUrl(item)">
+              <div @click="openUrl(item)" style="display: flex; align-items: center;">
                 <el-avatar :size="24" :src="getFavicon(item.url)" class="favicon">
                   {{ item.name && item.name.slice(0, 1) }}
                 </el-avatar>
@@ -103,7 +103,8 @@ export default {
       const collectData = localStorage.getItem('collectData');
       if (collectData) {
         that.serverData = JSON.parse(collectData);
-        that.collectList = that.serverData.collectList || [];
+        that.serverData.collectList = that.serverData.collectList || [];
+        that.collectList = that.serverData.collectList;
         that.pageInfo.total = that.collectList.length;
         that.pageInfo.currentPage = 1;
       } else {
@@ -129,6 +130,7 @@ export default {
         that.$nextTick(() => {
           that.serverData = data;
           that.loading = false;
+          that.serverData.collectList = that.serverData.collectList || [];
           that.collectList = that.serverData.collectList || [];
           that.pageInfo.total = that.collectList.length;
           that.pageInfo.currentPage = 1;
